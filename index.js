@@ -10,6 +10,8 @@ let users = [
 ];
 
 app.get('/', function(req, res) {
+    let sum = el => el.stars.reduce((a,b) => a + b);
+    users.sort((a,b) => sum(b) - sum(a));
     res.render('pages/index', {
         users: users
     });
@@ -25,8 +27,7 @@ app.get('/star/:id/:month', function(req, res) {
     } else {
         user.stars[req.params.month] = 1
     }  
-    let sum = el => el.stars.reduce((a,b) => a + b);
-    users.sort((a,b) => sum(b) - sum(a));
+
     res.redirect('/')
 })
 
