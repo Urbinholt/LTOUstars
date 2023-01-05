@@ -1,36 +1,38 @@
-const express = require("express");
-const app = express();
-const mongoose = require("mongoose");
-const dotenv = require("dotenv");
-const session = require('express-session');
-dotenv.config();
-const passport = require("passport");
-const { loginCheck } = require("./auth/passport");
-loginCheck(passport);
+let express = require('express');
+let app = express();
 
-// Mongo DB conncetion
-const database = process.env.MONGOLAB_URI;
-mongoose
-  .connect(database, { useUnifiedTopology: true, useNewUrlParser: true })
-  .then(() => console.log("e don connect"))
-  .catch((err) => console.log(err));
+app.set('view engine', 'ejs');
 
-app.set("view engine", "ejs");
+let users = [
+    {id: 1, name: 'Darius Urbonas', organization: "Technologijų palaikymo skyrius (LOU_450)", stars: [0,0,0,0,0,0,0,0,0,0,0]},
+    {id: 2, name: 'Andrius Mikuta', organization: "Technologijų palaikymo skyrius (LOU_450)", stars: [0,0,0,0,0,0,0,0,0,0,0]},
+    {id: 3, name: 'Beatričė Paškevičiūtė', organization: "Komunikacijos skyrius (LOU_170)", stars: [1,0,1,1,0,0,0,0,0,0,0]}
+];
 
-//BodyParsing
-app.use(express.urlencoded({ extended: false }));
-app.use(session({
-    secret:'oneboy',
-    saveUninitialized: true,
-    resave: true
-  }));
-  
+app.get('/', function(req, res) {
+    res.render('pages/index', {
+        users: users
+    });
+});
 
-app.use(passport.initialize());
-app.use(passport.session());
-//Routes
-app.use("/", require("./routes/login"));
+app.get('/star/:id/:month', function(req, res) {
+    let user = users.find(x => x.id == req.params.id);
 
-const PORT = process.env.PORT || 4111;
+    console.log(user)
 
-app.listen(PORT, console.log("Server has started at port " + PORT));
+    if(user.stars[req.params.month]) {
+        user.stars[req.params.month] = 0
+    } else {
+        user.stars[req.params.month] = 1
+    }  
+    let sum = el => el.stars.reduce((a,b) => a + b);
+    users.sort((a,b) => sum(b) - sum(a));
+    res.redirect('/')
+})
+
+// app.get('/about', function(req, res) {
+//     res.render('pages/about');
+// });
+
+app.listen(8080);
+console.log('8080 is the magic port');

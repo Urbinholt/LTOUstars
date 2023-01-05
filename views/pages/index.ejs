@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('../partials/head'); %>
+</head>
+<body class="container w-100">
+
+    <main>
+        <div class="border border-primary rounded p-2 mb-2 border-opacity-50" style="background-color: #003d5a;">
+            <h1 class="display-6">Darbuotoju vertinimo sistema</h1>
+            <br>
+            <table class="table table-sm" style="color: azure;">
+                <thead>
+                  <tr>
+                    <th  scope="col">#</th>
+                    <th scope="col">Vardas</th>
+                    <th scope="col">Skyrius</th>
+                    <th scope="col" class="text-center custom-class">Vasaris</th>
+                    <th scope="col" class="text-center custom-class">Kovas</th>
+                    <th scope="col" class="text-center custom-class">Balandis</th>
+                    <th scope="col" class="text-center custom-class">Gegužė</th>
+                    <th scope="col" class="text-center custom-class">Birželis</th>
+                    <th scope="col" class="text-center custom-class">Liepa</th>
+                    <th scope="col" class="text-center custom-class">Rugpjūtis</th>
+                    <th scope="col" class="text-center custom-class">Rugsėjis</th>
+                    <th scope="col" class="text-center custom-class">Spalis</th>
+                    <th scope="col" class="text-center custom-class">Lapkritis</th>
+                    <th scope="col" class="text-center custom-class">Gruodis</th>
+                  </tr>
+                </thead>
+                <tbody class="table-group-divider custom-class">
+                    <% users.forEach(function(user, i) { %>
+                        <tr>
+                            <th scope="row"><%= i +=1 %></th>
+                            <td><%= user.name %></td>
+                            <td><%= user.organization %></td>
+                            <% user.stars.forEach(function(star, c) { %>
+                                <% if (star) { %>
+                                    <td class="text-center"><a href="<%= 'star/' + user.id + '/' + c %>" style="color: inherit;"><i class="bi bi-star-fill"></i></a></td>
+                                    <% } else { %>
+                                        <td class="text-center"><a href="<%= 'star/' + user.id + '/' + c %>" style="color: inherit;"><i class="bi bi-star"></i></a></td>
+                                    <% } %>
+                            <% }); %>
+                        </li>
+                    <% }); %>
+                </tbody>
+              </table>
+
+
+
+            <!-- <ul>
+                <% users.forEach(function(user) { %>
+                    <li>
+                        <strong><%= user.name %></strong>
+                        skyrius <%= user.organization %>, Stars: <%= user.stars %>
+                    </li>
+                <% }); %>
+            </ul> -->
+        </div>
+    </main>
+
+    <footer class="blockquote-footer fixed-bottom">
+        <%- include('../partials/footer'); %>
+    </footer>
+
+</body>
+</html>
